@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"> <!-- Define a codificação de caracteres como UTF-8 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configura o viewport para responsividade -->
+  <title>Ensino Online - Login</title> <!-- Título da página -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Importa o CSS do Bootstrap -->
+  <link rel="stylesheet" href="estilo.css"> <!-- Importa o CSS personalizado -->
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <!-- Barra de navegação Bootstrap -->
+    <div class="container-fluid"> <!-- Container fluido para layout -->
+      <a class="navbar-brand" href="#">Ensino Online</a> <!-- Marca/logo da navbar -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"> <!-- Botão para colapsar menu em telas pequenas -->
+        <span class="navbar-toggler-icon"></span> <!-- Ícone do botão -->
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav"> <!-- Conteúdo colapsável da navbar -->
+        <ul class="navbar-nav"> <!-- Lista de itens de navegação -->
+          <li class="nav-item"><a class="nav-link" href="index.html">Cadastro Alunos</a></li> <!-- Link para cadastro de alunos -->
+          <li class="nav-item"><a class="nav-link" href="professores.html">Cadastro Professores</a></li> <!-- Link para cadastro de professores -->
+          <li class="nav-item"><a class="nav-link active" href="login.html">Login</a></li> <!-- Link ativo para login -->
+          <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li> <!-- Link para chat -->
+          <li class="nav-item"><a class="nav-link" href="reports.html">Relatórios</a></li> <!-- Link para relatórios -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container mt-5"> <!-- Container principal com margem superior -->
+    <h2>Login</h2> <!-- Título da seção -->
+    <form id="loginForm" class="row g-3"> <!-- Formulário de login com grid Bootstrap -->
+      <div class="col-md-6"><label for="email" class="form-label">E-mail</label><input type="email" class="form-control" id="email" required></div> <!-- Campo de email -->
+      <div class="col-md-6"><label for="senha" class="form-label">Senha</label><input type="password" class="form-control" id="senha" required></div> <!-- Campo de senha -->
+      <div class="col-12"><button type="submit" class="btn btn-primary">Entrar</button></div> <!-- Botão de submit -->
+    </form>
+  </div>
+  <div class="modal fade" id="responseModal" tabindex="-1"> <!-- Modal para exibir mensagens -->
+    <div class="modal-dialog"> <!-- Diálogo do modal -->
+      <div class="modal-content"> <!-- Conteúdo do modal -->
+        <div class="modal-header"><h5 class="modal-title">Resposta</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div> <!-- Cabeçalho do modal -->
+        <div class="modal-body" id="modalMessage"></div> <!-- Corpo do modal para mensagens -->
+        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button></div> <!-- Rodapé com botão fechar -->
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> <!-- Importa o JS do Bootstrap -->
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => { // Adiciona listener para o evento de submit do formulário
+      e.preventDefault(); // Impede o comportamento padrão de recarregar a página
+      const formData = { // Cria objeto com os dados do formulário
+        email: document.getElementById('email').value.trim(), // Obtém e limpa o valor do campo email
+        senha: document.getElementById('senha').value.trim() // Obtém e limpa o valor do campo senha
+      };
+      console.log('Enviando login:', formData); // Loga os dados enviados
+      try {
+        const response = await fetch('http://localhost:3002/api/login', { // Faz requisição POST para a API de login
+          method: 'POST', // Método HTTP
+          headers: { 'Content-Type': 'application/json' }, // Cabeçalho indicando JSON
+          body: JSON.stringify(formData) // Converte os dados para JSON
+        });
+        const result = await response.json(); // Converte a resposta para JSON
+        console.log('Resposta do servidor:', result); // Loga a resposta
+        document.getElementById('modalMessage').textContent = result.message; // Exibe a mensagem no modal
+        new bootstrap.Modal(document.getElementById('responseModal')).show(); // Abre o modal
+        if (response.ok) { // Se a resposta for bem-sucedida (status 200)
+          setTimeout(() => window.location.href = 'pagamento.html', 2000); // Redireciona para pagamento após 2 segundos
+        }
+      } catch (error) { // Captura erros na requisição
+        console.error('Erro no login:', error); // Loga o erro
+        document.getElementById('modalMessage').textContent = 'Erro ao fazer login: ' + error.message; // Exibe erro no modal
+        new bootstrap.Modal(document.getElementById('responseModal')).show(); // Abre o modal
+      }
+    });
+  </script>
+</body>
+</html>
