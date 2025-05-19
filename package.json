@@ -2,9 +2,9 @@
   "name": "projeto-pagina-web",
   "version": "1.0.0",
   "description": "Aplicação web multitemática para ensino online",
-  "main": "server/app.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node server/app.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "express": "^4.18.2",

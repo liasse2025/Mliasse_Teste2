@@ -13,10 +13,10 @@ const io = socketIo(server, { // Inicializa o Socket.IO no servidor HTTP
 
 app.use(cors({ origin: 'http://localhost:3002' })); // Aplica middleware CORS para todas as rotas HTTP, permitindo requisições de http://localhost:3002
 app.use(express.json()); // Aplica middleware para parsear corpos de requisições JSON
-app.use(express.static(path.join(__dirname, '../public'))); // Serve arquivos estáticos (HTML, CSS, JS) da pasta ../public
+app.use(express.static(path.join(__dirname, '.'))); // Serve arquivos estáticos (HTML, CSS, JS) da pasta ../public
 
 app.get('/', (req, res) => { // Define a rota GET para a raiz (/)
-  res.sendFile(path.join(__dirname, '../public', 'index.html')); // Envia o arquivo index.html como resposta
+  res.sendFile(path.join(__dirname, '.', '.')); // Envia o arquivo index.html como resposta
 });
 
 app.use('/api', routes); // Monta as rotas definidas em routes.js sob o prefixo /api
